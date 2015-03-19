@@ -119,11 +119,14 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        var content;
+        var content, newContent;
         beforeEach(function(done) { 
-            $('.feed').empty();
-            content = $('.feed ').html();
+            loadFeed(0,function() {
+                content = $('.feed').html();
+                done();
+            });
             loadFeed(1,function() {
+                newContent = $('.feed').html();
                 done();
             });
         });
@@ -133,7 +136,6 @@ $(function() {
          * after all of the feeds are done loading?
          */
         it('should have loaded content', function(done) {
-            var newContent = $('.feed').html();
             expect(content).not.toBe(newContent);
             done();
         });
