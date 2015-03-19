@@ -86,13 +86,14 @@ $(function() {
           * and that we remove it when we click the menu-icon-link class
           * and put it back when we click that class again
           */
-        var body = document.body;
+        body = document.body;
         it('toggles visibility when clicked', function() {
-            expect(body.className).toBe('menu-hidden');
+            console.log();
+            expect($('body').hasClass('menu-hidden')).toBeTruthy();
             $('.menu-icon-link').click();
-            expect(body.className).toBe('');
+            expect($('body').hasClass('menu-hidden')).not.toBeTruthy();
             $('.menu-icon-link').click();
-            expect(body.className).toBe('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBeTruthy();
         });
 
     });
@@ -120,6 +121,7 @@ $(function() {
          */
         var content;
         beforeEach(function(done) { 
+            $('.feed').empty();
             content = $('.feed ').html();
             loadFeed(1,function() {
                 done();
