@@ -32,9 +32,11 @@ $(function() {
             for (var i = 0; i < allFeeds.length; i++) {
                 expect('url' in allFeeds[i]).toBeTruthy();
                 expect(allFeeds[i].url).not.toBeNull();
+                expect(allFeeds[i].url.length > 1).toBeTruthy();
             }
             // Apparently we need to do this or for some reason 
-            // it thinks there are no expectations?
+            // it thinks there are no expectations, causing the test
+            // to work but spit out a weird warning.
             expect(true).toBe(true);
          });
 
@@ -44,9 +46,12 @@ $(function() {
             for (var i = 0; i < allFeeds.length; i++) {
                 expect('name' in allFeeds[i]).toBeTruthy();
                 expect(allFeeds[i].name).not.toBeNull();
+                expect(allFeeds[i].name.length > 1).toBeTruthy();
+
             }
             // Apparently we need to do this or for some reason 
-            // it thinks there are no expectations?
+            // it thinks there are no expectations, causing the test
+            // to work but spit out a weird warning.
             expect(true).toBe(true);
          });
 
@@ -113,23 +118,22 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        beforeEach(function(done) {
-            loadFeed(0,function() {
+        var content;
+        beforeEach(function(done) { 
+            content = $('.feed ').html();
+            loadFeed(1,function() {
                 done();
             });
-        })
+        });
 
         /* I'm not really sure by the TODO whether it means that 
          * this should run after every single feed loads, or 
          * after all of the feeds are done loading?
          */
         it('should have loaded content', function(done) {
-            var elements = document.getElementsByClassName('entry');
-            for (var i = 0; i < allFeeds.length; i++) {
-                expect(elements[i].innerHTML.length > 1).toBeTruthy();
-                done();
-
-            }
+            var newContent = $('.feed').html();
+            expect(content).not.toBe(newContent);
+            done();
         });
 
 
