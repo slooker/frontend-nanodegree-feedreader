@@ -102,7 +102,7 @@ $(function() {
             loadFeed(0,function() {
                 done();
             });
-        })
+        });
 
         // Check to verify that after feeds load, there's at least
         // one entry on the page.
