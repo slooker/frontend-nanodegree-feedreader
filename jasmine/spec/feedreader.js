@@ -27,46 +27,114 @@ $(function() {
         });
 
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
-         */
+        // Verifies all feeds have a url that isn't null
+         it('have a url', function() {
+            for (var i = 0; i < allFeeds.length; i++) {
+                expect('url' in allFeeds[i]).toBeTruthy();
+                expect(allFeeds[i].url).not.toBeNull();
+            }
+            // Apparently we need to do this or for some reason 
+            // it thinks there are no expectations?
+            expect(true).toBe(true);
+         });
 
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
+        // Verifies that all feeds have a name
+        it('have a name', function() {
+            for (var i = 0; i < allFeeds.length; i++) {
+                expect('name' in allFeeds[i]).toBeTruthy();
+                expect(allFeeds[i].name).not.toBeNull();
+            }
+            // Apparently we need to do this or for some reason 
+            // it thinks there are no expectations?
+            expect(true).toBe(true);
+         });
+
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
+    describe('The Menu', function() {
+        function parseMatrix(_str) {
+            return _str.replace(/^matrix(3d)?\((.*)\)$/,'$2').split(/, /);
+        }
 
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
+        /* We're getting transform3d of the css on the menu
+         * Once we have that, we take the matrix we get and change it
+         * into an array.  Then we check the array entries.
+         * There's probably a better way to do this, and I'd really love 
+         * to know what it is?
+         * I thought about just testing existence of the menu-hidden class
+         * but decided that didn't really show if it was hidden, just that 
+         * it had the class.  That would have been easier.
          */
+        it('is hidden by default', function() {
+            var menu = document.getElementsByClassName('menu')[0];
+            var style = window.getComputedStyle(menu, null);
+            var transform = style.getPropertyValue('transform');
+            var matrixArray = parseMatrix(transform);
+            expect(matrixArray[4] < 0).toBeTruthy();
+        });
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
+
+         /* Checking that the menu-hidden class is there to start
+          * and that we remove it when we click the menu-icon-link class
+          * and put it back when we click that class again
           */
+        var body = document.body;
+        it('toggles visibility when clicked', function() {
+            expect(body.className).toBe('menu-hidden');
+            $('.menu-icon-link').click();
+            expect(body.className).toBe('');
+            $('.menu-icon-link').click();
+            expect(body.className).toBe('menu-hidden');
+        });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    });
 
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test wil require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
+    describe('Initial Entries', function() {
+        beforeEach(function(done) {
+            loadFeed(0,function() {
+                done();
+            });
+        })
 
-    /* TODO: Write a new test suite named "New Feed Selection"
+        // Check to verify that after feeds load, there's at least
+        // one entry on the page.
+        it('at least one feed exists', function(done) {
+            expect(document.getElementsByClassName('entry').length > 0).toBeTruthy();
+            done();
+        });
 
+    });
+
+    describe('New Feed Selection', function() {
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        beforeEach(function(done) {
+            loadFeed(0,function() {
+                done();
+            });
+        })
+
+        /* I'm not really sure by the TODO whether it means that 
+         * this should run after every single feed loads, or 
+         * after all of the feeds are done loading?
+         */
+        it('should have loaded content', function(done) {
+            var elements = document.getElementsByClassName('entry');
+            for (var i = 0; i < allFeeds.length; i++) {
+                expect(elements[i].innerHTML.length > 1).toBeTruthy();
+                done();
+
+            }
+        });
+
+
+
+
+     });
+
 }());

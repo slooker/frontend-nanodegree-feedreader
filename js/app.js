@@ -41,6 +41,7 @@ function init() {
  * which will be called after everything has run successfully.
  */
 function loadFeed(id, cb) {
+    console.log(id);
     var feedUrl = allFeeds[id].url,
         feedName = allFeeds[id].name,
         feed = new google.feeds.Feed(feedUrl);
