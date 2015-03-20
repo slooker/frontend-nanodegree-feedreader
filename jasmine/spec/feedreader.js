@@ -33,6 +33,8 @@ $(function() {
                 expect('url' in allFeeds[i]).toBeTruthy();
                 expect(allFeeds[i].url).not.toBeNull();
                 expect(allFeeds[i].url.length > 1).toBeTruthy();
+                // Make sure the url is a string, not an object
+                expect((typeof allFeeds[i].url) === 'string').toBeTruthy();
             }
             // Apparently we need to do this or for some reason 
             // it thinks there are no expectations, causing the test
@@ -47,7 +49,8 @@ $(function() {
                 expect('name' in allFeeds[i]).toBeTruthy();
                 expect(allFeeds[i].name).not.toBeNull();
                 expect(allFeeds[i].name.length > 1).toBeTruthy();
-
+                // Make sure the name is a string, not an object
+                expect((typeof allFeeds[i].name) === 'string').toBeTruthy();
             }
             // Apparently we need to do this or for some reason 
             // it thinks there are no expectations, causing the test
@@ -109,6 +112,9 @@ $(function() {
         // one entry on the page.
         it('at least one feed exists', function(done) {
             expect(document.getElementsByClassName('entry').length > 0).toBeTruthy();
+            // I keep getting told this done() isn't needed, but if I don't have it
+            // I get the error as follows:
+            // Error: Timeout - Async callback was not invoked within timeout specified by jasmine.DEFAULT_TIMEOUT_INTERVAL.
             done();
         });
 
@@ -123,11 +129,10 @@ $(function() {
         beforeEach(function(done) { 
             loadFeed(0,function() {
                 content = $('.feed').html();
-                done();
-            });
-            loadFeed(1,function() {
-                newContent = $('.feed').html();
-                done();
+                loadFeed(1,function() {
+                    newContent = $('.feed').html();
+                    done();
+                });
             });
         });
 
@@ -137,12 +142,11 @@ $(function() {
          */
         it('should have loaded content', function(done) {
             expect(content).not.toBe(newContent);
+            // I keep getting told this done() isn't needed, but if I don't have it
+            // I get the error as follows:
+            // Error: Timeout - Async callback was not invoked within timeout specified by jasmine.DEFAULT_TIMEOUT_INTERVAL.
             done();
         });
-
-
-
-
      });
 
 }());
